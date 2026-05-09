@@ -5,6 +5,8 @@ import "time"
 const GRPC_PORT = "GRPC_PORT"
 
 type Config struct {
+	Server
+	Logger
 }
 
 type Server struct {
