@@ -1,0 +1,10 @@
+Server:
+  Port: 40000
+  Development: true
+  Timeout: 15
+  MaxConnectionIdle: 5
+  MaxConnectionAge: 5
+
+Telemetry:
+  Name: "classroom"
+  Endpoint: otel-collector:4317
