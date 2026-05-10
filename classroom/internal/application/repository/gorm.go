@@ -32,7 +32,7 @@ func (g *GormRepository) Read(ctx context.Context) ([]int64, error) {
 		Where(`
 			EXISTS (
 				SELECT 1 FROM frees
-				WHERE frees.classroom_id = classrooms.room_number
+				WHERE frees.room_number = classrooms.room_number
 				AND frees.from <= ?
 				AND frees.to > ?
 			)
@@ -44,13 +44,13 @@ func (g *GormRepository) Read(ctx context.Context) ([]int64, error) {
 
 func (g *GormRepository) Update(ctx context.Context, classroom *domain.Classroom) (*domain.Classroom, error) {
 	err := g.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
-		if err := tx.Where("classroom_id = ?", classroom.RoomNumber).
+		if err := tx.Where("room_number = ?", classroom.RoomNumber).
 			Delete(&domain.Free{}).Error; err != nil {
 			return err
 		}
 
 		for i := range classroom.Free {
-			classroom.Free[i].ClassroomID = classroom.RoomNumber
+			classroom.Free[i].RoomNumber = classroom.RoomNumber
 		}
 
 		if err := tx.Create(&classroom.Free).Error; err != nil {
