@@ -8,11 +8,13 @@ import (
 	"github.com/fernoe1/WATEC/classroom/config"
 	"github.com/fernoe1/WATEC/classroom/pkg/telemetry"
 	"go.opentelemetry.io/contrib/bridges/otelslog"
+	"go.opentelemetry.io/otel"
 )
 
 func main() {
 	slog.Info("reading config")
-	ctx := context.Background()
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 	cfg, err := config.ReadConfig()
 	if err != nil {
 		log.Fatal(err)
@@ -30,12 +32,12 @@ func main() {
 	}()
 
 	// tracer
-	tracer := tp.Tracer("classroom")
+	tracer := otel.Tracer("classroom")
 
 	// meter
 	meter := mp.Meter("classroom")
 
 	// logger
 	handler := otelslog.NewHandler("classroom")
-	logger := slog.New(handler)
+	log := slog.New(handler)
 }
