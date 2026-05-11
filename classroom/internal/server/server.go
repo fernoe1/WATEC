@@ -85,9 +85,9 @@ func (s *Server) Run() error {
 	clsrmsvc.RegisterClassroomServiceServer(grpcServer, classroomSvc)
 
 	go func() {
-		s.log.Info("gRPC server listening on %s", grpcAddr)
+		s.log.Info("gRPC server listening", "on", grpcAddr)
 		if err := grpcServer.Serve(listener); err != nil {
-			s.log.Error("gRPC server error: %v", err)
+			s.log.Error("gRPC server error", "error", err)
 			cancel()
 		}
 	}()

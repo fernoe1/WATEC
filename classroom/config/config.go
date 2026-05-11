@@ -11,6 +11,8 @@ const GRPC_PORT = "GRPC_PORT"
 type Config struct {
 	Server
 	Telemetry
+	PostgreSQL
+	Redis
 }
 
 type Server struct {
@@ -24,6 +26,22 @@ type Server struct {
 type Telemetry struct {
 	Name     string
 	Endpoint string
+}
+
+type PostgreSQL struct {
+	Host     string
+	User     string
+	Password string
+	Port     string
+	SslMode  string
+	Timezone string
+}
+
+type Redis struct {
+	Addr       string
+	Password   string
+	DB         int
+	MaxRetries int
 }
 
 func ReadConfig() (*Config, error) {

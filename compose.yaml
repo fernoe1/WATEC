@@ -6,6 +6,19 @@ services:
     depends_on:
       - otel-collector
 
+  classroom-db:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 130924
+    ports:
+      - "1987:5432"
+
+  redis:
+    image: redis:8
+    ports:
+      - "6379:6379"
+
   otel-collector:
     image: otel/opentelemetry-collector-contrib:0.151.0
     command: ["--config=/etc/otel-collector-config.yaml"]

@@ -8,3 +8,17 @@ Server:
 Telemetry:
   Name: "classroom"
   Endpoint: otel-collector:4317
+
+PostgreSQL:
+  Host: classroom-db
+  User: postgres
+  Password: 130924
+  Port: 5432
+  SslMode: disable
+  timezone: UTC
+
+Redis:
+  Addr: redis:6379
+  Password: ""
+  DB: 0
+  MaxRetries: 3

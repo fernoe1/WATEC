@@ -6,6 +6,9 @@ import (
 	"log/slog"
 
 	"github.com/fernoe1/WATEC/classroom/config"
+	"github.com/fernoe1/WATEC/classroom/internal/server"
+	"github.com/fernoe1/WATEC/classroom/pkg/gorm"
+	"github.com/fernoe1/WATEC/classroom/pkg/redis"
 	"github.com/fernoe1/WATEC/classroom/pkg/telemetry"
 	"go.opentelemetry.io/contrib/bridges/otelslog"
 	"go.opentelemetry.io/otel"
@@ -31,13 +34,19 @@ func main() {
 		lp.Shutdown(ctx)
 	}()
 
-	// tracer
 	tracer := otel.Tracer("classroom")
 
-	// meter
 	meter := mp.Meter("classroom")
 
-	// logger
 	handler := otelslog.NewHandler("classroom")
-	log := slog.New(handler)
+	logger := slog.New(handler)
+
+	gormDB := gorm.NewGormDB(cfg)
+	slog.Info("gorm connected")
+
+	redisClient := redis.NewRedis(cfg)
+	slog.Info("redis connected")
+
+	s := server.NewServer(&tracer, logger, &meter, gormDB, redisClient, cfg)
+	log.Fatal(s.Run())
 }
