@@ -11,13 +11,23 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-type classroomService struct {
+type ClassroomService struct {
 	clsrmsvc.UnimplementedClassroomServiceServer
 	log *slog.Logger
-	uc  application.ClassroomUsercase
+	uc  application.ClassroomUsecase
 }
 
-func (c classroomService) Create(ctx context.Context, request *clsrmsvc.CreateRequest) (*clsrmsvc.CreateResponse, error) {
+func NewClassroomService(
+	log *slog.Logger,
+	uc application.ClassroomUsecase,
+) *ClassroomService {
+	return &ClassroomService{
+		log: log,
+		uc:  uc,
+	}
+}
+
+func (c ClassroomService) Create(ctx context.Context, request *clsrmsvc.CreateRequest) (*clsrmsvc.CreateResponse, error) {
 	classroom := &domain.Classroom{}
 	roomNumber := request.GetRoomNumber()
 	free := request.GetFree()
@@ -38,7 +48,7 @@ func (c classroomService) Create(ctx context.Context, request *clsrmsvc.CreateRe
 	return nil, nil
 }
 
-func (c classroomService) Read(ctx context.Context, request *clsrmsvc.ReadRequest) (*clsrmsvc.ReadResponse, error) {
+func (c ClassroomService) Read(ctx context.Context, request *clsrmsvc.ReadRequest) (*clsrmsvc.ReadResponse, error) {
 	free, err := c.uc.Read(ctx)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "%v", err)
@@ -47,7 +57,7 @@ func (c classroomService) Read(ctx context.Context, request *clsrmsvc.ReadReques
 	return &clsrmsvc.ReadResponse{Free: free}, nil
 }
 
-func (c classroomService) Update(ctx context.Context, request *clsrmsvc.UpdateRequest) (*clsrmsvc.UpdateResponse, error) {
+func (c ClassroomService) Update(ctx context.Context, request *clsrmsvc.UpdateRequest) (*clsrmsvc.UpdateResponse, error) {
 	classroom := &domain.Classroom{}
 	roomNumber := request.GetRoomNumber()
 	free := request.GetFree()
@@ -69,7 +79,7 @@ func (c classroomService) Update(ctx context.Context, request *clsrmsvc.UpdateRe
 	return nil, nil
 }
 
-func (c classroomService) Delete(ctx context.Context, request *clsrmsvc.DeleteRequest) (*clsrmsvc.DeleteResponse, error) {
+func (c ClassroomService) Delete(ctx context.Context, request *clsrmsvc.DeleteRequest) (*clsrmsvc.DeleteResponse, error) {
 	roomNumber := request.GetRoomNumber()
 
 	if err := c.uc.Delete(ctx, roomNumber); err != nil {
@@ -79,7 +89,7 @@ func (c classroomService) Delete(ctx context.Context, request *clsrmsvc.DeleteRe
 	return nil, nil
 }
 
-func (c classroomService) mustEmbedUnimplementedClassroomServiceServer() {
+func (c ClassroomService) mustEmbedUnimplementedClassroomServiceServer() {
 	//TODO implement me
 	panic("implement me")
 }

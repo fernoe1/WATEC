@@ -14,6 +14,18 @@ type ClassroomUsecase struct {
 	imr application.InMemoryRepository
 }
 
+func NewClassroomUsecase(
+	log *slog.Logger,
+	r application.ClassroomRepository,
+	imr application.InMemoryRepository,
+) *ClassroomUsecase {
+	return &ClassroomUsecase{
+		log: log,
+		r:   r,
+		imr: imr,
+	}
+}
+
 func (c *ClassroomUsecase) Create(ctx context.Context, classroom *domain.Classroom) error {
 	return c.r.Create(ctx, classroom)
 }

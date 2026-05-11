@@ -12,6 +12,10 @@ type RedisRepository struct {
 	r *redis.Client
 }
 
+func NewRedisRepository(r *redis.Client) *RedisRepository {
+	return &RedisRepository{r: r}
+}
+
 func (r *RedisRepository) getTTLUntilNextHour() time.Duration {
 	now := time.Now().In(time.FixedZone("UTC+6", 6*3600))
 	next := now.Add(time.Hour).Truncate(time.Hour)

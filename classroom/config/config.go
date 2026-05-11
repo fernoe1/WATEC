@@ -14,7 +14,7 @@ type Config struct {
 }
 
 type Server struct {
-	Port              int
+	Port              string
 	Development       bool
 	Timeout           time.Duration
 	MaxConnectionIdle time.Duration

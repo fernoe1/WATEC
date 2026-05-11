@@ -9,15 +9,15 @@ import (
 )
 
 type GormRepository struct {
-	db *gorm.DB
+	g *gorm.DB
 }
 
-func NewGormRepository(db *gorm.DB) *GormRepository {
-	return &GormRepository{db: db}
+func NewGormRepository(g *gorm.DB) *GormRepository {
+	return &GormRepository{g: g}
 }
 
 func (g *GormRepository) Create(ctx context.Context, classroom *domain.Classroom) error {
-	return g.db.WithContext(ctx).Create(classroom).Error
+	return g.g.WithContext(ctx).Create(classroom).Error
 }
 
 func (g *GormRepository) Read(ctx context.Context) ([]int64, error) {
@@ -26,7 +26,7 @@ func (g *GormRepository) Read(ctx context.Context) ([]int64, error) {
 
 	var roomNumbers []int64
 
-	err := g.db.WithContext(ctx).
+	err := g.g.WithContext(ctx).
 		Table("classrooms").
 		Select("DISTINCT classrooms.room_number").
 		Where(`
@@ -43,7 +43,7 @@ func (g *GormRepository) Read(ctx context.Context) ([]int64, error) {
 }
 
 func (g *GormRepository) Update(ctx context.Context, classroom *domain.Classroom) (*domain.Classroom, error) {
-	err := g.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+	err := g.g.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 		if err := tx.Where("room_number = ?", classroom.RoomNumber).
 			Delete(&domain.Free{}).Error; err != nil {
 			return err
@@ -68,7 +68,7 @@ func (g *GormRepository) Update(ctx context.Context, classroom *domain.Classroom
 }
 
 func (g *GormRepository) Delete(ctx context.Context, roomNumber int64) error {
-	return g.db.WithContext(ctx).
+	return g.g.WithContext(ctx).
 		Where("room_number = ?", roomNumber).
 		Delete(&domain.Classroom{}).Error
 }
