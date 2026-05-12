@@ -1,7 +1,9 @@
 package redis
 
 import (
+	"context"
 	"log"
+	"time"
 
 	"github.com/fernoe1/WATEC/classroom/config"
 	"github.com/redis/go-redis/extra/redisotel/v9"
@@ -15,6 +17,13 @@ func NewRedis(cfg *config.Config) *redis.Client {
 		DB:         cfg.Redis.DB,
 		MaxRetries: cfg.Redis.MaxRetries,
 	})
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	if err := r.Ping(ctx).Err(); err != nil {
+		log.Fatal(err)
+	}
 
 	if err := redisotel.InstrumentTracing(r); err != nil {
 		log.Fatal(err)

@@ -1,6 +1,7 @@
 package config
 
 import (
+	"strings"
 	"time"
 
 	"github.com/spf13/viper"
@@ -55,6 +56,10 @@ func ReadConfig() (*Config, error) {
 	var c Config
 	if err := viper.Unmarshal(&c); err != nil {
 		return nil, err
+	}
+
+	if !strings.HasPrefix(c.Server.Port, ":") {
+		c.Server.Port = ":" + c.Server.Port
 	}
 
 	return &c, nil

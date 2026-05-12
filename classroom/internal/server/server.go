@@ -6,7 +6,6 @@ import (
 	"net"
 	"os"
 	"os/signal"
-	"strings"
 	"syscall"
 	"time"
 
@@ -61,9 +60,6 @@ func (s *Server) Run() error {
 	classroomUC := usecase.NewClassroomUsecase(s.log, classroomRepository, classroomCache)
 
 	grpcAddr := s.cfg.Server.Port
-	if !strings.HasPrefix(grpcAddr, ":") {
-		grpcAddr = ":" + grpcAddr
-	}
 
 	listener, err := net.Listen("tcp", grpcAddr)
 	defer listener.Close()
@@ -97,7 +93,7 @@ func (s *Server) Run() error {
 
 	select {
 	case sig := <-sigChan:
-		s.log.Warn("received signal: %v, shutting down", sig)
+		s.log.Warn("shutting down", "sig", sig)
 	case <-ctx.Done():
 		s.log.Warn("context canceled, shutting down")
 	}
