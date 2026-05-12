@@ -18,7 +18,7 @@ func NewRedis(cfg *config.Config) *redis.Client {
 		MaxRetries: cfg.Redis.MaxRetries,
 	})
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 7*time.Second)
 	defer cancel()
 
 	if err := r.Ping(ctx).Err(); err != nil {
