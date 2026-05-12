@@ -14,6 +14,6 @@ type ClassroomRepository interface {
 }
 
 type InMemoryRepository interface {
-	Set(ctx context.Context, free []int64)
+	Set(ctx context.Context, free []int64) error
 	Get(ctx context.Context) ([]int64, error)
 }

@@ -55,8 +55,8 @@ func (s *Server) Run() error {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	classroomRepository := repository.NewGormRepository(s.gormDB)
-	classroomCache := repository.NewRedisRepository(s.redis)
+	classroomRepository := repository.NewGormRepository(s.log, s.gormDB)
+	classroomCache := repository.NewRedisRepository(s.log, s.redis)
 
 	classroomUC := usecase.NewClassroomUsecase(s.log, classroomRepository, classroomCache)
 

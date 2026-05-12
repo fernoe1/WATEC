@@ -7,6 +7,7 @@ import (
 
 	"github.com/fernoe1/WATEC/classroom/config"
 	"github.com/fernoe1/WATEC/classroom/internal/server"
+	"github.com/fernoe1/WATEC/classroom/migrate"
 	"github.com/fernoe1/WATEC/classroom/pkg/gorm"
 	"github.com/fernoe1/WATEC/classroom/pkg/redis"
 	"github.com/fernoe1/WATEC/classroom/pkg/telemetry"
@@ -43,6 +44,7 @@ func main() {
 
 	gormDB := gorm.NewGormDB(cfg)
 	slog.Info("gorm connected")
+	migrate.Migrate(gormDB)
 
 	redisClient := redis.NewRedis(cfg)
 	slog.Info("redis connected")

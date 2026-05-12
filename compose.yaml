@@ -2,7 +2,7 @@ services:
   classroom:
     build: ./classroom
     ports:
-      - "8080:8080"
+      - "40000:40000"
     depends_on:
       - otel-collector
 
@@ -12,7 +12,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 130924
     ports:
-      - "1987:5432"
+      - "40001:5432"
 
   redis:
     image: redis:8

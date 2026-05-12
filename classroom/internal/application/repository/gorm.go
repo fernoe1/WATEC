@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"log/slog"
 	"time"
 
 	"github.com/fernoe1/WATEC/classroom/internal/domain"
@@ -9,11 +10,12 @@ import (
 )
 
 type GormRepository struct {
-	g *gorm.DB
+	log *slog.Logger
+	g   *gorm.DB
 }
 
-func NewGormRepository(g *gorm.DB) *GormRepository {
-	return &GormRepository{g: g}
+func NewGormRepository(log *slog.Logger, g *gorm.DB) *GormRepository {
+	return &GormRepository{log: log, g: g}
 }
 
 func (g *GormRepository) Create(ctx context.Context, classroom *domain.Classroom) error {
@@ -23,6 +25,7 @@ func (g *GormRepository) Create(ctx context.Context, classroom *domain.Classroom
 func (g *GormRepository) Read(ctx context.Context) ([]int64, error) {
 	now := time.Now().In(time.FixedZone("UTC+6", 6*3600))
 	hour := int64(now.Hour())
+	g.log.InfoContext(ctx, "repository.gorm.read", "now", now, "hour", hour)
 
 	var roomNumbers []int64
 

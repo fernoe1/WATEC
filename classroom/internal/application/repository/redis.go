@@ -3,17 +3,19 @@ package repository
 import (
 	"context"
 	"encoding/json"
+	"log/slog"
 	"time"
 
 	"github.com/redis/go-redis/v9"
 )
 
 type RedisRepository struct {
-	r *redis.Client
+	log *slog.Logger
+	r   *redis.Client
 }
 
-func NewRedisRepository(r *redis.Client) *RedisRepository {
-	return &RedisRepository{r: r}
+func NewRedisRepository(log *slog.Logger, r *redis.Client) *RedisRepository {
+	return &RedisRepository{log: log, r: r}
 }
 
 func (r *RedisRepository) getTTLUntilNextHour() time.Duration {
@@ -23,8 +25,9 @@ func (r *RedisRepository) getTTLUntilNextHour() time.Duration {
 	return next.Sub(now)
 }
 
-func (r *RedisRepository) Set(ctx context.Context, free []int64) {
-	r.r.Set(ctx, "free", free, r.getTTLUntilNextHour())
+func (r *RedisRepository) Set(ctx context.Context, free []int64) error {
+	data, _ := json.Marshal(free)
+	return r.r.Set(ctx, "free", data, r.getTTLUntilNextHour()).Err()
 }
 
 func (r *RedisRepository) Get(ctx context.Context) ([]int64, error) {
