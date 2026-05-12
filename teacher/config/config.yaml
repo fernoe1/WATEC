@@ -1,0 +1,20 @@
+Server:
+  Port: 40004
+  Development: true
+  Timeout: 15
+  MaxConnectionIdle: 5
+  MaxConnectionAge: 5
+
+PostgreSQL:
+  Host: teacher-db
+  User: postgres
+  Password: 130924
+  Port: 5432
+  SslMode: disable
+  timezone: UTC
+
+Redis:
+  Addr: redis:6379
+  Password: ""
+  DB: 0
+  MaxRetries: 3

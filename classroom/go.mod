@@ -3,7 +3,7 @@ module github.com/fernoe1/WATEC/classroom
 go 1.25.5
 
 require (
-	github.com/fernoe1/protogen v1.0.8
+	github.com/fernoe1/protogen v1.0.9
 	github.com/redis/go-redis/extra/redisotel/v9 v9.19.0
 	github.com/redis/go-redis/v9 v9.19.0
 	github.com/spf13/viper v1.21.0

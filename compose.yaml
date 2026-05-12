@@ -1,10 +1,16 @@
 services:
+
+
+# SERVICES
+
+
   classroom:
     build: ./classroom
     ports:
       - "40000:40000"
     depends_on:
       - otel-collector
+      - classroom-db
 
   classroom-db:
     image: postgres:17
@@ -14,10 +20,48 @@ services:
     ports:
       - "40001:5432"
 
+  locker:
+    build: ./locker
+    ports:
+      - "40002:40002"
+    depends_on:
+      - locker-db
+
+  locker-db:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 130924
+    ports:
+      - "40003:5432"
+
+  teacher:
+    build: ./teacher
+    ports:
+      - "40004:40004"
+    depends_on:
+      - teacher-db
+
+  teacher-db:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 130924
+    ports:
+      - "40005:5432"
+
+
+# REDIS
+
+
   redis:
     image: redis:8
     ports:
       - "6379:6379"
+
+
+# MONITORING
+
 
   otel-collector:
     image: otel/opentelemetry-collector-contrib:0.151.0
