@@ -10,3 +10,9 @@ Http:
 Telemetry:
   Name: "gateway"
   Endpoint: otel-collector:4317
+
+Redis:
+  Addr: redis:6379
+  Password: ""
+  DB: 0
+  MaxRetries: 3

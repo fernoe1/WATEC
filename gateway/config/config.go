@@ -10,6 +10,7 @@ import (
 type Config struct {
 	Http
 	Telemetry
+	Redis
 }
 
 type Http struct {
@@ -25,6 +26,13 @@ type Http struct {
 type Telemetry struct {
 	Name     string
 	Endpoint string
+}
+
+type Redis struct {
+	Addr       string
+	Password   string
+	DB         int
+	MaxRetries int
 }
 
 func ReadConfig() (*Config, error) {

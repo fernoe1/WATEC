@@ -4,6 +4,13 @@ services:
 # SERVICES
 
 
+  gateway:
+    build: ./gateway
+    ports:
+      - "39999:39999"
+    depends_on:
+      - otel-collector
+
   classroom:
     build: ./classroom
     ports:
@@ -11,6 +18,7 @@ services:
     depends_on:
       - otel-collector
       - classroom-db
+      - gateway
 
   classroom-db:
     image: postgres:17
@@ -26,6 +34,7 @@ services:
       - "40002:40002"
     depends_on:
       - locker-db
+      - gateway
 
   locker-db:
     image: postgres:17
@@ -41,6 +50,7 @@ services:
       - "40004:40004"
     depends_on:
       - teacher-db
+      - gateway
 
   teacher-db:
     image: postgres:17
