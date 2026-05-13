@@ -1,0 +1,12 @@
+Http:
+  Port: 39999
+  PprofPort: 6060
+  ReadHeaderTimeout: 5
+  ReadTimeout: 15
+  WriteTimeout: 15
+  IdleTimeout: 60
+  MaxHeaderBytes: 1048576
+
+Telemetry:
+  Name: "gateway"
+  Endpoint: otel-collector:4317
