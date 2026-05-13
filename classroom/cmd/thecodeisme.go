@@ -35,11 +35,11 @@ func main() {
 		lp.Shutdown(ctx)
 	}()
 
-	tracer := otel.Tracer("classroom")
+	tracer := otel.Tracer(cfg.Telemetry.Name)
 
-	meter := mp.Meter("classroom")
+	meter := mp.Meter(cfg.Telemetry.Name)
 
-	handler := otelslog.NewHandler("classroom")
+	handler := otelslog.NewHandler(cfg.Telemetry.Name)
 	logger := slog.New(handler)
 
 	gormDB := gorm.NewGormDB(cfg)
