@@ -33,6 +33,11 @@ func (c *ClassroomRepository) Delete(ctx context.Context, roomNumber int64) erro
 
 type InMemoryRepository struct{ mock.Mock }
 
+func (i *InMemoryRepository) Del(ctx context.Context) error {
+	args := i.Called(ctx)
+	return args.Error(0)
+}
+
 func (i *InMemoryRepository) Set(ctx context.Context, free []int64) error {
 	args := i.Called(ctx, free)
 	return args.Error(0)
