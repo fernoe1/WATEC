@@ -3,9 +3,11 @@ package server
 import (
 	"context"
 	"log/slog"
+	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	"github.com/fernoe1/WATEC/gateway/config"
 	"github.com/gin-gonic/gin"
@@ -20,6 +22,7 @@ type Server struct {
 	meter  *metric.Meter
 	redis  *redis.Client
 	gin    *gin.Engine
+	srv    *http.Server
 	cfg    *config.Config
 }
 
@@ -45,11 +48,11 @@ func (s *Server) Run() error {
 	defer cancel()
 
 	go func() {
+		slog.Info("http server listening", "on", s.cfg.Http.Port)
 		if err := s.runHTTPServer(); err != nil {
 			slog.Error("http server error", "error", err)
 			cancel()
 		}
-		slog.Info("http server listening", "on", s.cfg.Http.Port)
 	}()
 
 	sigChan := make(chan os.Signal, 1)
@@ -62,11 +65,14 @@ func (s *Server) Run() error {
 		s.log.Warn("context canceled, shutting down")
 	}
 
-	if err := s.close(); err != nil {
-		slog.Error("http server shutdown error", "error", err)
+	sCtx, sCancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer sCancel()
+
+	if err := s.srv.Shutdown(sCtx); err != nil {
+		s.log.Error("http server shutdown error", "error", err)
 	}
 
-	slog.Info("server shutdown")
+	s.log.Info("server shutdown")
 
 	return nil
 }

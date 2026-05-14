@@ -16,8 +16,6 @@ import (
 	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
 )
 
-var srv *http.Server
-
 func (s *Server) runHTTPServer() error {
 	// to do: run this in another endpoint with cors configured.
 	s.gin.GET("/health", func(c *gin.Context) {
@@ -37,28 +35,28 @@ func (s *Server) runHTTPServer() error {
 	}))
 	s.gin.Use(middleware.RateLimit(s.redis))
 
-	classroom := s.gin.Group("classroom")
+	classroom := s.gin.Group("/classroom")
 	classroomClient := client.NewClassroomClient(
 		clsrmsvc.NewClassroomServiceClient(grpc.NewGRPCClient(s.cfg.Server.ClassroomGrpcSrvAddr)),
 	)
 	classroomHandler := handler.NewClassroomHandler(classroom, classroomClient)
 	classroomHandler.MapClassroomRoutes()
 
-	locker := s.gin.Group("locker")
+	locker := s.gin.Group("/locker")
 	lockerClient := client.NewLockerClient(
 		lokrsvc.NewLockerServiceClient(grpc.NewGRPCClient(s.cfg.Server.LockerGrpcSrvAddr)),
 	)
 	lockerHandler := handler.NewLockerHandler(locker, lockerClient)
 	lockerHandler.MapLockerRoutes()
 
-	teacher := s.gin.Group("teacher")
+	teacher := s.gin.Group("/teacher")
 	teacherClient := client.NewTeacherClient(
 		tchersvc.NewTeacherServiceClient(grpc.NewGRPCClient(s.cfg.Server.TeacherGrpcSrvAddr)),
 	)
 	teacherHandler := handler.NewTeacherHandler(teacher, teacherClient)
 	teacherHandler.MapTeacherRoutes()
 
-	srv := http.Server{
+	s.srv = &http.Server{
 		Addr:              s.cfg.Http.Port,
 		Handler:           s.gin,
 		ReadTimeout:       s.cfg.Http.ReadTimeout,
@@ -68,9 +66,5 @@ func (s *Server) runHTTPServer() error {
 		MaxHeaderBytes:    s.cfg.Http.MaxHeaderBytes,
 	}
 
-	return srv.ListenAndServe()
-}
-
-func (s *Server) close() error {
-	return srv.Close()
+	return s.srv.ListenAndServe()
 }

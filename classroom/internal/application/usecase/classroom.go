@@ -31,30 +31,28 @@ func (c *ClassroomUsecase) Create(ctx context.Context, classroom *domain.Classro
 		return err
 	}
 
-	return c.imr.Set(ctx, []int64{})
+	return c.imr.Del(ctx)
 }
 
 func (c *ClassroomUsecase) Read(ctx context.Context) ([]int64, error) {
 	res, err := c.imr.Get(ctx)
-	if res != nil {
+	if err == nil && res != nil {
 		c.log.InfoContext(ctx, "usecase.classroom.read.cache")
 		return res, nil
 	}
 
-	if err == nil {
-		free, err := c.r.Read(ctx)
-		c.log.InfoContext(ctx, "usecase.classroom.read.db")
-
-		if err != nil {
-			return nil, err
-		}
-
-		c.imr.Set(ctx, free)
-
-		return free, nil
+	free, err := c.r.Read(ctx)
+	if err != nil {
+		return nil, err
 	}
 
-	return nil, err
+	c.log.InfoContext(ctx, "usecase.classroom.read.db")
+
+	if err := c.imr.Set(ctx, free); err != nil {
+		c.log.ErrorContext(ctx, "usecase.classroom.read.cache", "error", err)
+	}
+
+	return free, nil
 }
 
 func (c *ClassroomUsecase) Update(ctx context.Context, classroom *domain.Classroom) (*domain.Classroom, error) {
@@ -63,8 +61,8 @@ func (c *ClassroomUsecase) Update(ctx context.Context, classroom *domain.Classro
 		return nil, err
 	}
 
-	if err := c.imr.Set(ctx, []int64{}); err != nil {
-		return nil, err
+	if err := c.imr.Del(ctx); err != nil {
+		c.log.ErrorContext(ctx, "usecase.classroom.update.cache", "error", err)
 	}
 
 	return classroom, nil
@@ -75,5 +73,5 @@ func (c *ClassroomUsecase) Delete(ctx context.Context, roomNumber int64) error {
 		return err
 	}
 
-	return c.imr.Set(ctx, []int64{})
+	return c.imr.Del(ctx)
 }

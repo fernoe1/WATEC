@@ -6,10 +6,10 @@ Server:
 Http:
   Port: 39999
   PprofPort: 6060
-  ReadHeaderTimeout: 5
-  ReadTimeout: 15
-  WriteTimeout: 15
-  IdleTimeout: 60
+  ReadHeaderTimeout: 5s
+  ReadTimeout: 15s
+  WriteTimeout: 15s
+  IdleTimeout: 60s
   MaxHeaderBytes: 1048576
 
 Telemetry:

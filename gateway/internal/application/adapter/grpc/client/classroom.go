@@ -16,21 +16,17 @@ func NewClassroomClient(c clsrmsvc.ClassroomServiceClient) *ClassroomClient {
 }
 
 func (c *ClassroomClient) Create(ctx context.Context, in *clsrmsvc.CreateRequest, opts ...grpc.CallOption) (*clsrmsvc.CreateResponse, error) {
-	//TODO implement me
-	panic("implement me")
+	return c.c.Create(ctx, in)
 }
 
 func (c *ClassroomClient) Read(ctx context.Context, in *clsrmsvc.ReadRequest, opts ...grpc.CallOption) (*clsrmsvc.ReadResponse, error) {
-	//TODO implement me
-	panic("implement me")
+	return c.c.Read(ctx, in)
 }
 
 func (c *ClassroomClient) Update(ctx context.Context, in *clsrmsvc.UpdateRequest, opts ...grpc.CallOption) (*clsrmsvc.UpdateResponse, error) {
-	//TODO implement me
-	panic("implement me")
+	return c.c.Update(ctx, in)
 }
 
 func (c *ClassroomClient) Delete(ctx context.Context, in *clsrmsvc.DeleteRequest, opts ...grpc.CallOption) (*clsrmsvc.DeleteResponse, error) {
-	//TODO implement me
-	panic("implement me")
+	return c.c.Delete(ctx, in)
 }

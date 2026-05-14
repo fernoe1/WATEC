@@ -30,6 +30,7 @@ func RateLimit(r *redis.Client) gin.HandlerFunc {
 		p := r.TxPipeline()
 		p.Incr(c, key)
 		p.ExpireNX(c, key, windowSize)
+		_, _ = p.Exec(c)
 
 		c.Next()
 	}
