@@ -45,7 +45,17 @@ func (g *GormRepository) Update(ctx context.Context, locker *domain.Locker) (*do
 }
 
 func (g *GormRepository) Delete(ctx context.Context, number int64) error {
-	return g.g.WithContext(ctx).
+	result := g.g.WithContext(ctx).
 		Where("number = ?", number).
-		Delete(&domain.Locker{}).Error
+		Delete(&domain.Locker{})
+
+	if result.Error != nil {
+		return result.Error
+	}
+
+	if result.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
+	}
+
+	return nil
 }
