@@ -26,7 +26,16 @@ func (r *RedisRepository) getTTLUntilNextHour() time.Duration {
 }
 
 func (r *RedisRepository) Set(ctx context.Context, free []int64) error {
-	data, _ := json.Marshal(free)
+	if free == nil {
+		free = []int64{}
+	}
+
+	data, err := json.Marshal(free)
+	if err != nil {
+
+		return err
+	}
+
 	return r.r.Set(ctx, "free", data, r.getTTLUntilNextHour()).Err()
 }
 
@@ -49,4 +58,8 @@ func (r *RedisRepository) Get(ctx context.Context) ([]int64, error) {
 	}
 
 	return res, nil
+}
+
+func (r *RedisRepository) Del(ctx context.Context) error {
+	return r.r.Del(ctx, "free").Err()
 }
