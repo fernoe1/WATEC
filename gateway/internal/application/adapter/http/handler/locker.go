@@ -38,14 +38,15 @@ func (l *LockerHandler) Create(ctx *gin.Context) {
 }
 
 func (l *LockerHandler) Read(ctx *gin.Context) {
-	numberStr := ctx.Param("number")
-	number, err := strconv.ParseInt(numberStr, 10, 64)
+	number, err := strconv.ParseInt(ctx.Param("number"), 10, 64)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "invalid number"})
 		return
 	}
 
-	resp, err := l.client.Read(ctx, &lokrsvc.ReadRequest{Number: number})
+	resp, err := l.client.Read(ctx, &lokrsvc.ReadRequest{
+		Number: number,
+	})
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -71,14 +72,15 @@ func (l *LockerHandler) Update(ctx *gin.Context) {
 }
 
 func (l *LockerHandler) Delete(ctx *gin.Context) {
-	numberStr := ctx.Param("number")
-	number, err := strconv.ParseInt(numberStr, 10, 64)
+	number, err := strconv.ParseInt(ctx.Param("number"), 10, 64)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "invalid number"})
 		return
 	}
 
-	resp, err := l.client.Delete(ctx, &lokrsvc.DeleteRequest{Number: number})
+	resp, err := l.client.Delete(ctx, &lokrsvc.DeleteRequest{
+		Number: number,
+	})
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
