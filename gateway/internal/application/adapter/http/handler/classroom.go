@@ -1,8 +1,20 @@
 package handler
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/fernoe1/WATEC/gateway/internal/application/adapter/grpc/client"
+	"github.com/gin-gonic/gin"
+)
 
 type ClassroomHandler struct {
+	group  *gin.RouterGroup
+	client *client.ClassroomClient
+}
+
+func NewClassroomHandler(
+	rg *gin.RouterGroup,
+	c *client.ClassroomClient,
+) *ClassroomHandler {
+	return &ClassroomHandler{group: rg, client: c}
 }
 
 func (c *ClassroomHandler) Create(ctx *gin.Context) {

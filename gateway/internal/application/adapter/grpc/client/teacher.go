@@ -11,6 +11,10 @@ type TeacherClient struct {
 	c tchersvc.TeacherServiceClient
 }
 
+func NewTeacherClient(c tchersvc.TeacherServiceClient) *TeacherClient {
+	return &TeacherClient{c: c}
+}
+
 func (t *TeacherClient) Create(ctx context.Context, in *tchersvc.CreateRequest, opts ...grpc.CallOption) (*tchersvc.CreateResponse, error) {
 	//TODO implement me
 	panic("implement me")

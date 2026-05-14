@@ -2,13 +2,14 @@ package middleware
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/redis/go-redis/v9"
 )
 
 const (
-	windowSize = 10
+	windowSize = 10 * time.Second
 	limit      = 5
 )
 

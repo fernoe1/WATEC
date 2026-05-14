@@ -1,3 +1,8 @@
+Server:
+  ClassroomGrpcSrvAddr: classroom:40000
+  LockerGrpcSrvAddr: locker:40002
+  TeacherGrpcSrvAddr: teacher:40004
+
 Http:
   Port: 39999
   PprofPort: 6060

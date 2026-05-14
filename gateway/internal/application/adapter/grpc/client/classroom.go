@@ -11,6 +11,10 @@ type ClassroomClient struct {
 	c clsrmsvc.ClassroomServiceClient
 }
 
+func NewClassroomClient(c clsrmsvc.ClassroomServiceClient) *ClassroomClient {
+	return &ClassroomClient{c: c}
+}
+
 func (c *ClassroomClient) Create(ctx context.Context, in *clsrmsvc.CreateRequest, opts ...grpc.CallOption) (*clsrmsvc.CreateResponse, error) {
 	//TODO implement me
 	panic("implement me")

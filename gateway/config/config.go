@@ -8,9 +8,16 @@ import (
 )
 
 type Config struct {
+	Server
 	Http
 	Telemetry
 	Redis
+}
+
+type Server struct {
+	ClassroomGrpcSrvAddr string
+	LockerGrpcSrvAddr    string
+	TeacherGrpcSrvAddr   string
 }
 
 type Http struct {

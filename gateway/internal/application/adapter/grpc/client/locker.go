@@ -11,6 +11,10 @@ type LockerClient struct {
 	c lokrsvc.LockerServiceClient
 }
 
+func NewLockerClient(c lokrsvc.LockerServiceClient) *LockerClient {
+	return &LockerClient{c: c}
+}
+
 func (l *LockerClient) Create(ctx context.Context, in *lokrsvc.CreateRequest, opts ...grpc.CallOption) (*lokrsvc.CreateResponse, error) {
 	//TODO implement me
 	panic("implement me")
