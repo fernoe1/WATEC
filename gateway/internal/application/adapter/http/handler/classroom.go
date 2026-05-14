@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/fernoe1/WATEC/gateway/internal/application/adapter/grpc/client"
 	clsrmsvc "github.com/fernoe1/protogen/watec/service/classroom"
@@ -57,11 +58,36 @@ func (c *ClassroomHandler) Read(ctx *gin.Context) {
 }
 
 func (c *ClassroomHandler) Update(ctx *gin.Context) {
-	//TODO implement me
-	panic("implement me")
+	var updateReq clsrmsvc.UpdateRequest
+	if err := ctx.ShouldBindJSON(&updateReq); err != nil {
+
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	updateResp, err := c.client.Update(ctx, &updateReq)
+	if err != nil {
+
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, updateResp)
 }
 
 func (c *ClassroomHandler) Delete(ctx *gin.Context) {
-	//TODO implement me
-	panic("implement me")
+	number := ctx.Param("roomNumber")
+	roomNumber, err := strconv.Atoi(number)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
+
+	deleteResp, err := c.client.Delete(ctx, &clsrmsvc.DeleteRequest{RoomNumber: int64(roomNumber)})
+	if err != nil {
+
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, deleteResp)
 }

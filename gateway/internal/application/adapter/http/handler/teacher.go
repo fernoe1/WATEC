@@ -3,12 +3,14 @@ package handler
 import (
 	"net/http"
 
+	"github.com/fernoe1/WATEC/gateway/internal/application/adapter/grpc/client"
 	tchersvc "github.com/fernoe1/protogen/watec/service/teacher"
 	"github.com/gin-gonic/gin"
 )
 
 type TeacherHandler struct {
-	client tchersvc.TeacherServiceClient
+	group  *gin.RouterGroup
+	client *client.TeacherClient
 }
 
 type teacherFreeRequest struct {
@@ -22,8 +24,8 @@ type teacherWriteRequest struct {
 	Free []teacherFreeRequest `json:"free"`
 }
 
-func NewTeacherHandler(client tchersvc.TeacherServiceClient) *TeacherHandler {
-	return &TeacherHandler{client: client}
+func NewTeacherHandler(rg *gin.RouterGroup, c *client.TeacherClient) *TeacherHandler {
+	return &TeacherHandler{group: rg, client: c}
 }
 
 func toProtoTeacherFree(free []teacherFreeRequest) []*tchersvc.Free {

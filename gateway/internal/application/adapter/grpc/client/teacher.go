@@ -11,8 +11,8 @@ type TeacherClient struct {
 	c tchersvc.TeacherServiceClient
 }
 
-func NewTeacherClient(cc grpc.ClientConnInterface) *TeacherClient {
-	return &TeacherClient{c: tchersvc.NewTeacherServiceClient(cc)}
+func NewTeacherClient(cc tchersvc.TeacherServiceClient) *TeacherClient {
+	return &TeacherClient{c: cc}
 }
 
 func (t *TeacherClient) Create(ctx context.Context, in *tchersvc.CreateRequest, opts ...grpc.CallOption) (*tchersvc.CreateResponse, error) {
