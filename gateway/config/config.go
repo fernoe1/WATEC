@@ -12,6 +12,7 @@ type Config struct {
 	Http
 	Telemetry
 	Redis
+	Nats
 }
 
 type Server struct {
@@ -40,6 +41,11 @@ type Redis struct {
 	Password   string
 	DB         int
 	MaxRetries int
+}
+
+type Nats struct {
+	Addr                string
+	NotificationSubject string
 }
 
 func ReadConfig() (*Config, error) {

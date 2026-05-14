@@ -20,3 +20,7 @@ func (t *TeacherHandler) MapTeacherRoutes() {
 	t.group.PUT("", t.Update)
 	t.group.DELETE("/:name", t.Delete)
 }
+
+func (n *NotificationHandler) MapNotificationRoutes() {
+	n.group.POST("", n.Post)
+}

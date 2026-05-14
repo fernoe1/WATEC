@@ -26,9 +26,11 @@ func (s *Server) Run() error {
 	presenter := mailjet.NewMailjetPresenter(s.cfg)
 	notificationUC := usecase.NewNotificationUsecase(presenter)
 
-	mailjetHandler := notification.NewMailjetHandler(notificationUC)
+	mailjet := notification.NewMailjetHandler(notificationUC)
 
-	err := notification.Subscribe(ctx, s.nc, "mailjet", mailjetHandler.Handler, s.cfg)
+	notificationSubscriber := notification.NewNotificationSubscriber(s.nc, s.cfg)
+
+	err := notificationSubscriber.Subscribe(ctx, "mailjet", mailjet.Handler)
 	if err != nil {
 		return err
 	}

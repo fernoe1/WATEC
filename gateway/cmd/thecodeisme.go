@@ -7,6 +7,7 @@ import (
 
 	"github.com/fernoe1/WATEC/gateway/config"
 	"github.com/fernoe1/WATEC/gateway/internal/server"
+	"github.com/fernoe1/WATEC/gateway/pkg/nats"
 	"github.com/fernoe1/WATEC/gateway/pkg/redis"
 	"github.com/fernoe1/WATEC/gateway/pkg/telemetry"
 	"go.opentelemetry.io/contrib/bridges/otelslog"
@@ -44,7 +45,10 @@ func main() {
 	redisClient := redis.NewRedis(cfg)
 	slog.Info("redis connected")
 
-	s := server.NewServer(&tracer, logger, &meter, redisClient, cfg)
+	nc := nats.NewNATS(cfg)
+	slog.Info("nats connected")
+
+	s := server.NewServer(&tracer, logger, &meter, redisClient, nc, cfg)
 
 	log.Fatal(s.Run())
 }

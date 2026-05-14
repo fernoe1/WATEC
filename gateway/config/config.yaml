@@ -21,3 +21,7 @@ Redis:
   Password: ""
   DB: 0
   MaxRetries: 3
+
+Nats:
+  Addr: nats://nats:4222
+  NotificationSubject: notification

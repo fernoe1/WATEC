@@ -9,10 +9,26 @@ import (
 	"github.com/nats-io/nats.go"
 )
 
-func Subscribe(ctx context.Context, nc *nats.Conn, subject string, handler Handler, cfg *config.Config) error {
-	subj := cfg.NotificationSubject + "." + subject
+type Subscriber struct {
+	nc  *nats.Conn
+	cfg *config.Config
+}
 
-	sub, err := nc.SubscribeSync(subj)
+func NewNotificationSubscriber(
+	nc *nats.Conn,
+	cfg *config.Config,
+) *Subscriber {
+	return &Subscriber{nc: nc, cfg: cfg}
+}
+
+func (ns *Subscriber) Subscribe(
+	ctx context.Context,
+	subj string,
+	handler Handler,
+) error {
+	subj = ns.cfg.Nats.NotificationSubject + "." + subj
+
+	sub, err := ns.nc.SubscribeSync(subj)
 
 	if err != nil {
 		return err

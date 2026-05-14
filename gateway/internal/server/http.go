@@ -7,6 +7,7 @@ import (
 	"github.com/fernoe1/WATEC/gateway/internal/application/adapter/grpc/client"
 	"github.com/fernoe1/WATEC/gateway/internal/application/adapter/http/handler"
 	"github.com/fernoe1/WATEC/gateway/internal/application/adapter/http/middleware"
+	notif "github.com/fernoe1/WATEC/gateway/internal/application/adapter/nats/notification"
 	"github.com/fernoe1/WATEC/gateway/pkg/grpc"
 	clsrmsvc "github.com/fernoe1/protogen/watec/service/classroom"
 	lokrsvc "github.com/fernoe1/protogen/watec/service/locker"
@@ -55,6 +56,12 @@ func (s *Server) runHTTPServer() error {
 	)
 	teacherHandler := handler.NewTeacherHandler(teacher, teacherClient)
 	teacherHandler.MapTeacherRoutes()
+
+	notification := s.gin.Group("/notification")
+	notificationHandler := handler.NewNotificationHandler(notification,
+		notif.NewNotificationPublisher(s.nc, s.cfg),
+	)
+	notificationHandler.MapNotificationRoutes()
 
 	s.srv = &http.Server{
 		Addr:              s.cfg.Http.Port,

@@ -16,7 +16,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	nc := nats.NewNATS()
+	nc := nats.NewNATS(cfg)
 	slog.Info("nats connected")
 
 	s := server.NewServer(nc, cfg)
