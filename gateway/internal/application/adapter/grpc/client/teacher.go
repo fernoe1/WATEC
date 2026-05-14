@@ -11,26 +11,22 @@ type TeacherClient struct {
 	c tchersvc.TeacherServiceClient
 }
 
-func NewTeacherClient(c tchersvc.TeacherServiceClient) *TeacherClient {
-	return &TeacherClient{c: c}
+func NewTeacherClient(cc grpc.ClientConnInterface) *TeacherClient {
+	return &TeacherClient{c: tchersvc.NewTeacherServiceClient(cc)}
 }
 
 func (t *TeacherClient) Create(ctx context.Context, in *tchersvc.CreateRequest, opts ...grpc.CallOption) (*tchersvc.CreateResponse, error) {
-	//TODO implement me
-	panic("implement me")
+	return t.c.Create(ctx, in, opts...)
 }
 
 func (t *TeacherClient) Read(ctx context.Context, in *tchersvc.ReadRequest, opts ...grpc.CallOption) (*tchersvc.ReadResponse, error) {
-	//TODO implement me
-	panic("implement me")
+	return t.c.Read(ctx, in, opts...)
 }
 
 func (t *TeacherClient) Update(ctx context.Context, in *tchersvc.UpdateRequest, opts ...grpc.CallOption) (*tchersvc.UpdateResponse, error) {
-	//TODO implement me
-	panic("implement me")
+	return t.c.Update(ctx, in, opts...)
 }
 
 func (t *TeacherClient) Delete(ctx context.Context, in *tchersvc.DeleteRequest, opts ...grpc.CallOption) (*tchersvc.DeleteResponse, error) {
-	//TODO implement me
-	panic("implement me")
+	return t.c.Delete(ctx, in, opts...)
 }
