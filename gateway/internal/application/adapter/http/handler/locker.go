@@ -72,7 +72,7 @@ func (l *LockerHandler) Update(ctx *gin.Context) {
 }
 
 func (l *LockerHandler) Delete(ctx *gin.Context) {
-	number, err := strconv.Atoi(ctx.Param("number"))
+	number, err := strconv.Atoi(ctx.Param("roomNumber"))
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "invalid number"})
 		return
