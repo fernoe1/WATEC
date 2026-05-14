@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/fernoe1/WATEC/gateway/internal/application/adapter/grpc/client"
 	lokrsvc "github.com/fernoe1/protogen/watec/service/locker"
@@ -37,13 +38,15 @@ func (l *LockerHandler) Create(ctx *gin.Context) {
 }
 
 func (l *LockerHandler) Read(ctx *gin.Context) {
-	var req lokrsvc.ReadRequest
-	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	number, err := strconv.Atoi(ctx.Param("number"))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "invalid number"})
 		return
 	}
 
-	resp, err := l.client.Read(ctx, &req)
+	resp, err := l.client.Read(ctx, &lokrsvc.ReadRequest{
+		Number: int64(number),
+	})
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -69,13 +72,15 @@ func (l *LockerHandler) Update(ctx *gin.Context) {
 }
 
 func (l *LockerHandler) Delete(ctx *gin.Context) {
-	var req lokrsvc.DeleteRequest
-	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	number, err := strconv.Atoi(ctx.Param("number"))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "invalid number"})
 		return
 	}
 
-	resp, err := l.client.Delete(ctx, &req)
+	resp, err := l.client.Delete(ctx, &lokrsvc.DeleteRequest{
+		Number: int64(number),
+	})
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
