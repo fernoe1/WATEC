@@ -20,21 +20,49 @@ func NewLockerUsecase(
 }
 
 func (l *LockerUsecase) Create(ctx context.Context, locker *domain.Locker) error {
-	//TODO implement me
-	panic("implement me")
+	
+	if err := l.r.Create(ctx, locker); err != nil {
+		return err
+	}
+
+	_ = l.imr.Set(ctx, locker)
+
+	return nil
 }
 
 func (l *LockerUsecase) Read(ctx context.Context, number int64) (*domain.Locker, error) {
-	//TODO implement me
-	panic("implement me")
+
+	locker, err := l.imr.Get(ctx, number)
+	if err == nil && locker != nil {
+		return locker, nil
+	}
+
+	locker, err = l.r.Read(ctx, number)
+	if err != nil {
+		return nil, err
+	}
+
+	_ = l.imr.Set(ctx, locker)
+
+	return locker, nil
 }
 
 func (l *LockerUsecase) Update(ctx context.Context, locker *domain.Locker) (*domain.Locker, error) {
-	//TODO implement me
-	panic("implement me")
+	updated, err := l.r.Update(ctx, locker)
+	if err != nil {
+		return nil, err
+	}
+
+	_ = l.imr.Set(ctx, updated)
+
+	return updated, nil
 }
 
 func (l *LockerUsecase) Delete(ctx context.Context, number int64) error {
-	//TODO implement me
-	panic("implement me")
+
+	if err := l.r.Delete(ctx, number); err != nil {
+		return err
+	}
+
+	return nil
 }
