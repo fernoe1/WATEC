@@ -11,7 +11,7 @@ func (l *LockerHandler) MapLockerRoutes() {
 	l.group.POST("", l.Create)
 	l.group.GET("/:number", l.Read)
 	l.group.PUT("", l.Update)
-	l.group.DELETE(":number", l.Delete)
+	l.group.DELETE("/:number", l.Delete)
 }
 
 func (t *TeacherHandler) MapTeacherRoutes() {
