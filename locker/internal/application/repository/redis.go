@@ -2,6 +2,8 @@ package repository
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 
 	"github.com/fernoe1/WATEC/locker/internal/domain"
 	"github.com/redis/go-redis/v9"
@@ -16,11 +18,30 @@ func NewRedisRepository(r *redis.Client) *RedisRepository {
 }
 
 func (r *RedisRepository) Set(ctx context.Context, locker *domain.Locker) error {
-	//TODO implement me
-	panic("implement me")
+	data, err := json.Marshal(locker)
+	if err != nil {
+		return err
+	}
+
+	key := fmt.Sprintf("locker:%d", locker.Number)
+
+	return r.r.Set(ctx, key, data, 0).Err()
 }
 
 func (r *RedisRepository) Get(ctx context.Context, number int64) (*domain.Locker, error) {
-	//TODO implement me
-	panic("implement me")
+	key := fmt.Sprintf("locker:%d", number)
+
+	data, err := r.r.Get(ctx, key).Bytes()
+	if err != nil {
+		return nil, err
+	}
+
+	var locker domain.Locker
+
+	err = json.Unmarshal(data, &locker)
+	if err != nil {
+		return nil, err
+	}
+
+	return &locker, nil
 }

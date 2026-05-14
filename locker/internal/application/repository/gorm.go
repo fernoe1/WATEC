@@ -16,21 +16,36 @@ func NewGormRepository(g *gorm.DB) *GormRepository {
 }
 
 func (g *GormRepository) Create(ctx context.Context, locker *domain.Locker) error {
-	//TODO implement me
-	panic("implement me")
+	return g.g.WithContext(ctx).Create(locker).Error
 }
 
 func (g *GormRepository) Read(ctx context.Context, number int64) (*domain.Locker, error) {
-	//TODO implement me
-	panic("implement me")
+	var locker domain.Locker
+
+	err := g.g.WithContext(ctx).
+		Where("number = ?", number).
+		First(&locker).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &locker, nil
 }
 
 func (g *GormRepository) Update(ctx context.Context, locker *domain.Locker) (*domain.Locker, error) {
-	//TODO implement me
-	panic("implement me")
+	err := g.g.WithContext(ctx).
+		Save(locker).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return locker, nil
 }
 
 func (g *GormRepository) Delete(ctx context.Context, number int64) error {
-	//TODO implement me
-	panic("implement me")
+	return g.g.WithContext(ctx).
+		Where("number = ?", number).
+		Delete(&domain.Locker{}).Error
 }

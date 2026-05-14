@@ -16,21 +16,17 @@ func NewLockerClient(c lokrsvc.LockerServiceClient) *LockerClient {
 }
 
 func (l *LockerClient) Create(ctx context.Context, in *lokrsvc.CreateRequest, opts ...grpc.CallOption) (*lokrsvc.CreateResponse, error) {
-	//TODO implement me
-	panic("implement me")
+	return l.c.Create(ctx, in)
 }
 
 func (l *LockerClient) Read(ctx context.Context, in *lokrsvc.ReadRequest, opts ...grpc.CallOption) (*lokrsvc.ReadResponse, error) {
-	//TODO implement me
-	panic("implement me")
+	return l.c.Read(ctx, in)
 }
 
 func (l *LockerClient) Update(ctx context.Context, in *lokrsvc.UpdateRequest, opts ...grpc.CallOption) (*lokrsvc.UpdateResponse, error) {
-	//TODO implement me
-	panic("implement me")
+	return l.c.Update(ctx, in)
 }
 
 func (l *LockerClient) Delete(ctx context.Context, in *lokrsvc.DeleteRequest, opts ...grpc.CallOption) (*lokrsvc.DeleteResponse, error) {
-	//TODO implement me
-	panic("implement me")
+	return l.c.Delete(ctx, in)
 }
