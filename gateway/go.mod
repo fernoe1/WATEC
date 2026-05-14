@@ -3,7 +3,7 @@ module github.com/fernoe1/WATEC/gateway
 go 1.25.5
 
 require (
-	github.com/fernoe1/protogen v1.0.9
+	github.com/fernoe1/protogen v1.1.0
 	github.com/gin-gonic/gin v1.12.0
 	github.com/redis/go-redis/extra/redisotel/v9 v9.19.0
 	github.com/redis/go-redis/v9 v9.19.0

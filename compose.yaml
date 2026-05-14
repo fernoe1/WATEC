@@ -10,6 +10,8 @@ services:
       - "39999:39999"
     depends_on:
       - otel-collector
+      - nats
+      - redis
 
   classroom:
     build: ./classroom
@@ -60,6 +62,12 @@ services:
     ports:
       - "40005:5432"
 
+  notification:
+    build: ./notification
+    depends_on:
+      - nats
+      - gateway
+
 
 # REDIS
 
@@ -68,6 +76,17 @@ services:
     image: redis:8
     ports:
       - "6379:6379"
+
+
+# NATS
+
+
+  nats:
+    image: nats:2.14.0
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+    command: [ "-js", "-m", "8222" ]
 
 
 # MONITORING

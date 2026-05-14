@@ -1,0 +1,9 @@
+Nats:
+  Addr: nats://nats:4222
+  NotificationSubject: notification
+
+Mailjet:
+  ApiKey:
+  ApiSecret:
+  FromEmail:
+  FromName:
