@@ -16,4 +16,5 @@ type LockerRepository interface {
 type InMemoryLockerRepository interface {
 	Set(ctx context.Context, locker *domain.Locker) error
 	Get(ctx context.Context, number int64) (*domain.Locker, error)
+	Delete(ctx context.Context, number int64) error
 }

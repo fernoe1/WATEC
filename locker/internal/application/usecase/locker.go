@@ -20,7 +20,7 @@ func NewLockerUsecase(
 }
 
 func (l *LockerUsecase) Create(ctx context.Context, locker *domain.Locker) error {
-	
+
 	if err := l.r.Create(ctx, locker); err != nil {
 		return err
 	}
@@ -63,6 +63,8 @@ func (l *LockerUsecase) Delete(ctx context.Context, number int64) error {
 	if err := l.r.Delete(ctx, number); err != nil {
 		return err
 	}
+
+	_ = l.imr.Delete(ctx, number)
 
 	return nil
 }
