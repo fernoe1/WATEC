@@ -45,3 +45,9 @@ func (r *RedisRepository) Get(ctx context.Context, number int64) (*domain.Locker
 
 	return &locker, nil
 }
+
+func (r *RedisRepository) Delete(ctx context.Context, number int64) error {
+	key := fmt.Sprintf("locker:%d", number)
+
+	return r.r.Del(ctx, key).Err()
+}
