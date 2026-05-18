@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { Plus, Search, Save, Trash2, RefreshCw, Clock, DoorOpen, Server } from 'lucide-react';
 import './styles.css';
 
-const DEFAULT_API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api/v1';
+const DEFAULT_API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:39999';
 
 const emptySlot = () => ({ roomNumber: '', from: '', to: '' });
 
@@ -51,7 +51,7 @@ function App() {
   const [message, setMessage] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const teacherUrl = useMemo(() => `${apiBase.replace(/\/$/, '')}/teachers`, [apiBase]);
+  const teacherUrl = useMemo(() => `${apiBase.replace(/\/$/, '')}/teacher`, [apiBase]);
 
   const showMessage = (type, text) => setMessage({ type, text });
 
